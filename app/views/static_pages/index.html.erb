@@ -1,0 +1,49 @@
+<section class="page-section portfolio" id="portfolio">
+    <div class="container">
+
+      <!-- Portfolio Section Heading -->
+      <h2 class="page-section-heading text-center text-uppercase text-secondary mb-0">Liste des Gossips</h2>
+
+      <!-- Icon Divider -->
+      <div class="divider-custom">
+        <div class="divider-custom-line"></div>
+        <div class="divider-custom-icon">
+          <i class="fas fa-star"></i>
+        </div>
+        <div class="divider-custom-line"></div>
+      </div>
+
+      <div class="container mb-3">
+	      <%= link_to "Creer un nouveau gossip", new_gossip_path, class: 'btn btn-primary' %>
+      </div>
+	
+      <!-- Cards Gossips -->
+      <div class="row">
+ 	      <% @gossip_array.each do |gossip| %>
+		      <div class="card m-2" style="width: 16rem;">
+			    	<div class="card-body">
+				  	  <h5 class="card-title"> <%= gossip.title %></h5>
+  				  	<h6 class="card-subtitle mb-2 text-muted">Auteur : <%= User.find(gossip.user_id).first_name %></h6>
+              <p class="card-text"><a href="/users/<%=gossip.user_id%>">En savoir plus sur l'auteur</a></p>
+              <%= link_to "Voir plus sur le gossip ...", gossip_path(gossip.id), :class => "card-text" %>
+              <p class="card-text">Nombre de commentaires <%= Comment.where(gossip_id: gossip.id).count %></p>
+              <p class="card-text"><%= gossip.likes.count %> <%= (gossip.likes.count) == 1 ? 'Like' : 'Likes'%></p>
+                
+              <% if logged_in? %>
+                <% pre_like = gossip.likes.find { |like| like.user_id == log_in(current_user)} %>
+                <% if pre_like %>
+                  <%= button_to 'Unlike', gossip_like_path(gossip, pre_like), method: :delete %>
+                <% else %>
+                  <%= button_to 'Like', gossip_likes_path(gossip), method: :post %>
+                <% end %>
+                <% if gossip.user_id == log_in(current_user) %>
+                  <a href="<%= edit_gossip_path(gossip.id) %>" class="btn btn-primary">Editer</a>
+                  <a href="<%= gossip_path(gossip.id) %>" class="btn btn-danger" data-confirm="êtes-vous sûr ?" data-method="DELETE">Supprimer</a>
+                <% end %>
+              <% end %>
+			      </div>
+  		    </div>
+	      <% end %>
+      </div>
+    </div>
+  </section>

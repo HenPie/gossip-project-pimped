@@ -1,0 +1,16 @@
+<h1>Créer un commentaire</h1>
+<%= form_tag url_for(action: 'create'), method: "post" do %>
+  <%= label_tag 'Content' %>
+  <%= text_area_tag 'content', @comment.content %>
+  <br /> <br />
+  <%= submit_tag "Create Comment" %>
+<% end %>
+
+<% if @comment.errors.any? %>
+  <p>Nous n'avons pas réussi à créer le commentaire pour la (ou les) raison(s) suivante(s) :</p>
+  <ul>
+    <% @comment.errors.full_messages.each do |message| %>
+      <li><%= message %></li>
+    <% end %>
+  </ul>
+<% end %>

@@ -1,0 +1,10 @@
+<h1>Edite ce commentaire</h1>
+<p>le gossip est le n°<%= @gossip.id%></p>
+<p>l'auteur est : <%= @gossip.user.first_name%></p>
+<%= form_tag url_for(action: 'update'), method: "patch" do %>
+  <%= label_tag 'Content' %>
+  <%= text_area_tag 'content', @comment.content %>
+  <br /> <br />
+  <%= submit_tag "Editer le commentaire" %>
+<% end %>
+<br /><br />

@@ -1,0 +1,29 @@
+<div class="card mx-auto mt-5" style="width: 18rem;">
+  <div class="card-header">
+    <%= @user.first_name %> <%= @user.last_name %>
+  </div>
+  <ul class="list-group list-group-flush">
+    <li class="list-group-item">Title: <%= @gossip.title %></li>
+    <li class="list-group-item">Content: <%= @gossip.content %></li>
+    <li class="list-group-item"><a href="/cities/<%=@user.city_id%>">Ville: <%= @user.city.name %></a></li>
+  </ul>
+  <a href="/gossips/<%=(@gossip.id)%>/comments/new" class="btn btn-primary">Ajouter un commentaire</a>
+  <p><%= @gossip.likes.count %> <%= (@gossip.likes.count) == 1 ? 'Like' : 'Likes'%></p>
+  <% pre_like = @gossip.likes.find { |like| like.user_id == current_user.id} %>
+  <% if pre_like %>
+    <%= button_to 'Unlike', gossip_like_path(@gossip, pre_like), method: :delete %>
+  <% else %>
+    <%= button_to 'Like', gossip_likes_path(@gossip), method: :post %>
+  <% end %>
+</div>
+<h2>Commentaires</h2>
+<% @comments.each do |comment| %>
+		      <div class="card m-2" style="width: 16rem;">
+			    	<div class="card-body">
+				  	  <h5 class="card-title"> <%= comment.content %></h5>
+  				  	<h6 class="card-subtitle mb-2 text-muted">Auteur : <%= User.find(comment.user_id).first_name %></h6>
+              <a href="/gossips/<%=(@gossip.id)%>/comments/<%=(comment.id)%>/edit" class="btn btn-primary">Modifier le commentaire</a>
+              <a href="/gossips/<%=(@gossip.id)%>/comments/<%=(comment.id)%>" class="btn btn-danger" data-confirm="êtes-vous sûr ?" data-method="DELETE">Supprimer</a>
+			      </div>
+  		    </div>
+	      <% end %>
